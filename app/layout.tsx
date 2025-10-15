@@ -5,6 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { AppThemeProvider } from "./providers"; // make sure app/providers.tsx exists (client component)
 import Footer from "@/components/Footer";
+import { WalletProviders } from "./walletProviders";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Lunr Payments",
+  title: "Lunr Compliance",
   description: "Simplifying Crypto Transactions for the Real World.",
 };
 
@@ -27,13 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background text-foreground antialiased selection:bg-white/40`}
       >
-        <AppThemeProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </AppThemeProvider>
+        <WalletProviders>
+          <AppThemeProvider>{children}</AppThemeProvider>
+        </WalletProviders>
       </body>
     </html>
   );

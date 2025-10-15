@@ -18,7 +18,7 @@ const Footer = () => {
                 <span className="text-foreground text-xl">Lunr</span>
               </Link>
               <p className="mt-2 text-sm text-foreground/70 max-w-xs">
-                Cross-chain Compliance for the industry.
+                Generate verifiable proofs of solvency
               </p>
             </div>
 

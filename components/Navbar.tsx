@@ -25,10 +25,12 @@ const Navbar = () => {
             {/* Right: Dashboard CTA */}
             <div className="justify-self-end flex gap-2">
               <Button variant="ghost">
-                <Link href="/dashboard">Contact Us</Link>
+                <Link href="https://www.linkedin.com/in/rafael-galo-372258276?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">
+                  Contact Us
+                </Link>
               </Button>
               <Button variant="outline">
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/auth">Dashboard</Link>
               </Button>
             </div>
           </div>
