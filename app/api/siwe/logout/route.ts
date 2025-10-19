@@ -1,14 +1,13 @@
-// app/api/logout/route.ts
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getIronSession } from 'iron-session';
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { getIronSession } from "iron-session";
 
 const sessionOptions = {
-  cookieName: 'siwe-session',
+  cookieName: "siwe-session",
   password: process.env.SESSION_SECRET!,
   cookieOptions: {
-    secure: process.env.NODE_ENV === 'production',
-    path: '/', // make sure it matches your middleware usage
+    secure: process.env.NODE_ENV === "production",
+    path: "/", // make sure it matches your middleware usage
   },
 };
 
@@ -21,7 +20,7 @@ export async function POST() {
 
   // Also nuke any extra auth cookie you had, e.g. `siwe-token`
   const res = NextResponse.json({ ok: true });
-  res.cookies.set('siwe-token', '', { expires: new Date(0), path: '/' });
+  res.cookies.set("siwe-token", "", { expires: new Date(0), path: "/" });
 
   return res;
 }

@@ -14,18 +14,20 @@ import {
   ChevronLeft,
   ChevronRight,
   Moon,
-LayoutDashboard, ShieldCheck, Wallet, FileText, BarChart3, Telescope, LifeBuoy } from "lucide-react";
+  LayoutDashboard,
+  ShieldCheck,
+  Wallet,
+  FileText,
+  BarChart3,
+  Telescope,
+  LifeBuoy,
+} from "lucide-react";
 
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { ScrollArea } from "../ui/scroll-area";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
 type User = { name?: string; email?: string; imageUrl?: string } | null;
 
@@ -42,13 +44,27 @@ type DashboardSidebarProps = {
 };
 
 const navItems = [
-  { href: "/dashboard/overview",  label: "Generate Proof",      icon: LayoutDashboard },
-  { href: "/dashboard/proofs",    label: "Search Liquidity",        icon: ShieldCheck },     // generate & view solvency proofs
-  { href: "/dashboard/wallets",   label: "Wallets",       icon: Wallet },          // managed addresses & chains
+  {
+    href: "/dashboard/generateproofs",
+    label: "Generate Proof",
+    icon: LayoutDashboard,
+  },
+  { href: "/dashboard/proofs", label: "Search Liquidity", icon: ShieldCheck }, // generate & view solvency proofs
+  { href: "/dashboard/wallets", label: "Wallets", icon: Wallet }, // managed addresses & chains
 
   // footer
-  { href: "https://github.com/Galo8to9/Lunr",                label: "Docs",          icon: LifeBuoy, footer: true },
-  { href: "/dashboard/settings",            label: "Settings",      icon: Settings,  footer: true },
+  {
+    href: "https://github.com/Galo8to9/Lunr",
+    label: "Docs",
+    icon: LifeBuoy,
+    footer: true,
+  },
+  {
+    href: "/dashboard/settings",
+    label: "Settings",
+    icon: Settings,
+    footer: true,
+  },
 ];
 
 // Small file icon to avoid another import; reusing lucide path
@@ -82,27 +98,18 @@ export default function DashboardSidebar({
   }, [user?.name, user?.email]);
 
   const brand = (
- 
-    
-
-
-      <Link href="/" className="inline-flex items-center gap-1">
-                <Moon
-                  className="h-8 w-8 text-foreground/90"
-                  aria-hidden="true"
-                />
-                {!collapsed && <span className="text-foreground text-4xl">Lunr</span>}
-  
-              </Link>
-
+    <Link href="/" className="inline-flex items-center gap-1">
+      <Moon className="h-8 w-8 text-foreground/90" aria-hidden="true" />
+      {!collapsed && <span className="text-foreground text-4xl">Lunr</span>}
+    </Link>
   );
 
   // Desktop rail
   const rail = (
     <aside
-  className="hidden md:flex fixed top-0 left-0 h-dvh w-64 z-50
+      className="hidden md:flex fixed top-0 left-0 h-dvh w-64 z-50
              border-r border-white/10 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70"
->
+    >
       <div className="flex h-full w-full flex-col">
         <div className="flex items-center justify-between px-3 py-3">
           {brand}
@@ -128,7 +135,8 @@ export default function DashboardSidebar({
               .map((item) => {
                 const Icon = item.icon;
                 const active =
-                  pathname === item.href || pathname?.startsWith(item.href + "/");
+                  pathname === item.href ||
+                  pathname?.startsWith(item.href + "/");
                 return (
                   <Link
                     key={item.href}
@@ -143,7 +151,9 @@ export default function DashboardSidebar({
                     title={collapsed ? item.label : undefined}
                   >
                     <Icon className="h-5 w-5 shrink-0" />
-                    {!collapsed && <span className="truncate">{item.label}</span>}
+                    {!collapsed && (
+                      <span className="truncate">{item.label}</span>
+                    )}
                   </Link>
                 );
               })}
@@ -184,7 +194,8 @@ export default function DashboardSidebar({
               .map((item) => {
                 const Icon = item.icon;
                 const active =
-                  pathname === item.href || pathname?.startsWith(item.href + "/");
+                  pathname === item.href ||
+                  pathname?.startsWith(item.href + "/");
                 return (
                   <Link
                     key={item.href}
@@ -199,7 +210,9 @@ export default function DashboardSidebar({
                     title={collapsed ? item.label : undefined}
                   >
                     <Icon className="h-5 w-5 shrink-0" />
-                    {!collapsed && <span className="truncate">{item.label}</span>}
+                    {!collapsed && (
+                      <span className="truncate">{item.label}</span>
+                    )}
                   </Link>
                 );
               })}
@@ -231,12 +244,9 @@ export default function DashboardSidebar({
         <SheetHeader className="px-4 py-3">
           <SheetTitle className="flex items-center gap-2">
             <Link href="/" className="inline-flex items-center gap-1">
-                <Moon
-                  className="h-6 w-6 text-foreground/90"
-                  aria-hidden="true"
-                />
-                <span className="text-foreground text-9xl">Lunr</span>
-              </Link>
+              <Moon className="h-6 w-6 text-foreground/90" aria-hidden="true" />
+              <span className="text-foreground text-9xl">Lunr</span>
+            </Link>
           </SheetTitle>
         </SheetHeader>
         <Separator />
@@ -286,7 +296,6 @@ export default function DashboardSidebar({
           </nav>
         </ScrollArea>
         <Separator />
-        
       </SheetContent>
     </Sheet>
   );
@@ -298,7 +307,11 @@ export default function DashboardSidebar({
       {/* Mobile drawer */}
       <div className="md:hidden">{drawer}</div>
       {/* Spacer so content doesn’t slide under the rail */}
-      <div className={["hidden md:block", collapsed ? "w-[72px]" : "w-64"].join(" ")} />
+      <div
+        className={["hidden md:block", collapsed ? "w-[72px]" : "w-64"].join(
+          " "
+        )}
+      />
     </>
   );
 }

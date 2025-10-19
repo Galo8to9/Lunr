@@ -5,17 +5,20 @@ import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import { cookies } from "next/headers";
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
 
   return (
-    
     <div className="min-h-dvh">
       {/* Fixed sidebar (desktop) + mobile drawer control */}
       <DashboardSidebar
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
-        user={{ name: "Rafael", email: "rafael@junitec.pt" }}
+        user={{ name: "Regulator", email: "" }}
         defaultCollapsed={false}
       />
 

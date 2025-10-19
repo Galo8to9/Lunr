@@ -21,10 +21,28 @@ export function SignInButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [session, setSession] = useState(null);
 
   useEffect(() => {
     setMounted(true);
+    fetch("/api/siwe/session")
+      .then((res) => res.json())
+      .then((data) => {
+        setSession(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch session:", err);
+        setLoading(false);
+      });
   }, []);
+
+  // Separate effect to handle navigation
+  useEffect(() => {
+    if (session?.address) {
+      router.push("/dashboard");
+    }
+  }, [session, router]);
 
   // FUNCTIONS
   const handleSign = async () => {
@@ -91,8 +109,14 @@ export function SignInButton() {
 
   if (!mounted) {
     return (
-      <div className="flex w-full">
-        <Button disabled>Connect Wallet</Button>
+      <div className="flex w-full justify-center">
+        <Button
+          className="w-full"
+          onClick={handleSign}
+          disabled={loading || !address}
+        >
+          Connect Wallet
+        </Button>
       </div>
     );
   }
