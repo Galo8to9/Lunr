@@ -10,10 +10,6 @@ const STORAGE_KEY = "ownedWallets";
 const ETH_REGEX = /^0x[a-fA-F0-9]{40}$/;
 
 interface OwnedWalletsProps {
-  /**
-   * Optional initial wallets to seed the list (will be validated & merged with localStorage).
-   * If not provided, a set of 10 hardcoded DEFAULT_WALLETS will be used.
-   */
   initialWallets?: string[];
 }
 

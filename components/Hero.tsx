@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Container from "./Container";
 import { Button } from "./ui/button";
-import Demo from "./Demo";
 import NoiseLayer from "./NoiseLayer";
 
 export default function Hero() {
@@ -22,7 +21,8 @@ export default function Hero() {
               className="h-full w-full"
               style={{
                 backgroundImage: `
-radial-gradient(calc(34rem * var(--blob-scale)) calc(28rem * var(--blob-scale)) at 50% 38%, rgba(0, 157, 255, 0.45), transparent 60%), radial-gradient(calc(32rem * var(--blob-scale)) calc(26rem * var(--blob-scale)) at 62% 52%, rgba(31, 155, 66, 0.75), transparent 60%), radial-gradient(calc(30rem * var(--blob-scale)) calc(24rem * var(--blob-scale)) at 38% 56%, rgba(0,180,255,0.30), transparent 60%), radial-gradient(calc(36rem * var(--blob-scale)) calc(28rem * var(--blob-scale)) at 50% 70%, rgba(123, 180, 43, 0.69), transparent 65%)`,
+radial-gradient(calc(34rem * var(--blob-scale)) calc(28rem * var(--blob-scale)) at 50% 38%, rgba(0, 157, 255, 0.45), transparent 60%), radial-gradient(calc(32rem * var(--blob-scale)) calc(26rem * var(--blob-scale)) at 62% 52%, rgba(31, 155, 66, 0.75), transparent 60%), radial-gradient(calc(30rem * var(--blob-scale)) calc(24rem * var(--blob-scale)) at 38% 56%, rgba(0,180,255,0.30), transparent 60%), radial-gradient(calc(36rem * var(--blob-scale)) calc(28rem * var(--blob-scale)) at 50% 70%, rgba(123, 180, 43, 0.69), transparent 65%)
+`,
               }}
             />
           </div>

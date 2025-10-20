@@ -1,24 +1,18 @@
 "use client";
-
-import OwnedWallets from "@/components/dashboard/OwnedWallets";
-import { Button } from "@/components/ui/button";
 import React, { useState } from "react";
-
-import { useOwnedWallets } from "@/stores/ownedWallets";
+import { Button } from "../ui/button";
 import { buildFromAccounts, leafHash } from "@/lib/merkle";
 import { ACCOUNTS } from "@/lib/accounts";
+import { useOwnedWallets } from "@/stores/ownedWallets";
+import { usePythPriceCotations } from "@/stores/pythPriceCotations";
 
-import TableAssetsPrice from "@/components/dashboard/TableAssetsPrice";
-import PriceFeed from "@/components/dashboard/PriceFeed";
-import { Table } from "@/components/ui/table";
-import AssetsPrice from "@/components/dashboard/AssetsPrice";
-
-const Page = () => {
+const GenerateProof = () => {
   const { wallets, addMany, removeOne } = useOwnedWallets();
+  const { pythPriceCotations } = usePythPriceCotations();
   const [root, setRoot] = useState<string>();
 
   const handleGenerateProof = () => {
-    const tree = buildFromAccounts(ACCOUNTS);
+    const tree = buildFromAccounts(wallets);
     setRoot(tree.root);
     console.log("Tree", tree.root);
     for (const account of ACCOUNTS) {
@@ -31,13 +25,11 @@ const Page = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4">
-      <PriceFeed />
-
-      <AssetsPrice />
-      {/* <TableAssetsPrice /> */}
-    </div>
+    <>
+      <Button onClick={handleGenerateProof}>Generate On-chain Proof</Button>
+      {root && <p className="text-xs break-all">{root}</p>}
+    </>
   );
 };
 
-export default Page;
+export default GenerateProof;

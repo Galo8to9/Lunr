@@ -1,9 +1,7 @@
-// app/(dashboard)/layout.tsx
 "use client";
 import * as React from "react";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
-import { cookies } from "next/headers";
 
 export default function DashboardLayout({
   children,
@@ -11,25 +9,29 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
 
   return (
     <div className="min-h-dvh">
-      {/* Fixed sidebar (desktop) + mobile drawer control */}
       <DashboardSidebar
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
-        user={{ name: "Regulator", email: "" }}
-        defaultCollapsed={false}
+        user={{ name: "Regulator", email: "Demo Tester" }}
+        collapsed={sidebarCollapsed}
       />
 
-      {/* Fixed navbar that starts after the rail on md+ */}
       <DashboardNavbar
         onToggleSidebar={() => setSidebarOpen((o) => !o)}
         user={{ name: "Rafael", email: "rafael@junitec.pt" }}
+        sidebarCollapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed((c) => !c)}
       />
 
-      {/* Page content: push below navbar (h-14) and right of rail (w-64) on md+ */}
-      <div className="pt-14 md:pl-64">
+      <div 
+        className={`pt-14 transition-all duration-300 ease-in-out ${
+          sidebarCollapsed ? "md:pl-[72px]" : "md:pl-64"
+        }`}
+      >
         <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>

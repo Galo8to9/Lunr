@@ -3,20 +3,23 @@
 import { useEffect, useState } from "react";
 
 export default function NoiseLayer({
-  opacity = 0.55,      // grain strength
-  size = 140,          // tile size in px (smaller = finer grain)
-  alpha = 55,          // 0–255 alpha per grain dot (higher = harsher)
-  blend = "overlay",   // overlay | soft-light | multiply | screen
+  opacity = 0.55,                // grain strength
+  size = 140,                    // tile size in px (smaller = finer grain)
+  alpha = 55,                    // 0–255 alpha per grain dot (higher = harsher)
+  blend = "overlay",             // overlay | soft-light | multiply | screen
+  viewport = false,              // true => fixed full-viewport overlay
+  className = "",               // allow extra classes (e.g., z-index)
 }: {
   opacity?: number;
   size?: number;
   alpha?: number;
   blend?: React.CSSProperties["mixBlendMode"];
+  viewport?: boolean;
+  className?: string;
 }) {
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
-    // Gera o noise apenas no cliente
     if (typeof window === "undefined") return;
 
     const s = Math.max(16, Math.min(size, 512));
@@ -38,20 +41,31 @@ export default function NoiseLayer({
     }
 
     ctx.putImageData(img, 0, 0);
-    const data = c.toDataURL("image/png");
-    setUrl(data);
+    setUrl(c.toDataURL("image/png"));
   }, [size, alpha]);
+
+  // Choose positioning strategy
+  const basePos = viewport
+    ? "fixed inset-0"          // full viewport
+    : "absolute inset-0";      // fill positioned ancestor
 
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-[1] will-change-transform"
+      data-noise-layer
+      className={[
+        "pointer-events-none will-change-transform",
+        basePos,
+        className || "z-[1]",
+      ].join(" ")}
       style={{
         opacity,
         mixBlendMode: blend,
         backgroundImage: url ? `url(${url})` : undefined,
         backgroundRepeat: "repeat",
-        backgroundSize: `${size}px ${size}px`,
+        backgroundSize: `${Math.max(16, Math.min(size, 512))}px ${Math.max(16, Math.min(size, 512))}px`,
+        backgroundPosition: "0 0",      // ensure tiling starts top-left, not centered
+        ...(viewport ? { backgroundAttachment: "fixed" } : null),
       }}
     />
   );

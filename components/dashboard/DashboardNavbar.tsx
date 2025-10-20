@@ -10,8 +10,12 @@ import {
   Sun,
   Moon,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Settings,
   LogOut,
+  PanelLeftIcon,
+  PanelRightIcon,
 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -28,6 +32,14 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "../ui/avatar";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../ui/breadcrumb";
 
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { useRouter } from "next/navigation";
@@ -44,11 +56,15 @@ import { ConnectButton, WalletButton } from "@rainbow-me/rainbowkit";
 type DashboardNavbarProps = {
   onToggleSidebar?: () => void;
   user?: { name?: string; email?: string; imageUrl?: string } | null;
+  sidebarCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 };
 
 const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
   onToggleSidebar,
   user,
+  sidebarCollapsed = false,
+  onToggleCollapse,
 }) => {
   const pathname = usePathname();
   const initials = React.useMemo(() => {
@@ -71,54 +87,93 @@ const DashboardNavbar: React.FC<DashboardNavbarProps> = ({
     router.push('/');           // optional redirect
   };
 
- 
+  // Generate breadcrumb items from pathname
+  const breadcrumbItems = React.useMemo(() => {
+    const paths = pathname.split('/').filter(Boolean);
+    return paths.map((path, index) => {
+      const href = '/' + paths.slice(0, index + 1).join('/');
+      const label = path.charAt(0).toUpperCase() + path.slice(1).replace(/-/g, ' ');
+      return { href, label, isLast: index === paths.length - 1 };
+    });
+  }, [pathname]);
 
   return (
-    <header className="fixed top-0 right-0 left-0 md:left-64 h-14 z-40
-                   border-b border-white/10 bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70">
+    <header className={`fixed top-0 right-0 h-16 z-40 transition-all duration-300 ease-in-out
+                    bg-background/70 backdrop-blur-xl supports-[backdrop-filter]:bg-background/70
+                    ${sidebarCollapsed ? 'md:left-[72px]' : 'md:left-64'} left-0`}>
 
 
-      <div className="mx-auto w-full  px-4 sm:px-6">
-        <div className="flex h-14 items-center gap-3">
-          {/* Left: Mobile burger + Brand */}
-          <div className="flex items-center gap-2">
+      <div className="mx-auto w-full px-4 sm:px-6">
+        <div className="flex h-16 items-center gap-3">
+          {/* Left: Mobile burger + Collapse button + Breadcrumb */}
+          <div className="flex items-center gap-3 flex-1 min-w-0">
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden flex-shrink-0"
               aria-label="Toggle sidebar"
               onClick={onToggleSidebar}
             >
               <Menu className="h-5 w-5" />
             </Button>
 
-            
+            {/* Desktop Collapse Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hidden md:flex flex-shrink-0"
+              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              onClick={onToggleCollapse}
+            >
+             
+                <PanelLeftIcon className="h-5 w-5" />
+         
+           
+
+            </Button>
+
+            {/* Breadcrumb */}
+            <Breadcrumb className="hidden md:block">
+              <BreadcrumbList>
+                <BreadcrumbItem>
+                  <BreadcrumbLink href="/">Home</BreadcrumbLink>
+                </BreadcrumbItem>
+                {breadcrumbItems.map((item, index) => (
+                  <React.Fragment key={item.href}>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      {item.isLast ? (
+                        <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                      ) : (
+                        <BreadcrumbLink href={item.href}>{item.label}</BreadcrumbLink>
+                      )}
+                    </BreadcrumbItem>
+                  </React.Fragment>
+                ))}
+              </BreadcrumbList>
+            </Breadcrumb>
           </div>
 
-          {/* Center: Search */}
-          <div className="flex flex-1 items-center justify-center md:justify-start">
-            <div className="relative w-full max-w-md">
+          {/* Right: Search + Actions */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            {/* Search */}
+            <div className="relative w-full max-w-xs hidden lg:block">
               <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-60" />
               <Input
                 type="search"
                 placeholder="Search…"
-                className="pl-9 pr-24"
+                className="pl-9 pr-16 w-full"
                 aria-label="Search"
               />
-              <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground hidden sm:block">
+              <div className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
                 ⌘K
               </div>
             </div>
-          </div>
 
-         
-
-          {/* Right: Actions */}
-          <div className="flex items-center gap-1 sm:gap-2">
-            {/* Breadcrumb-ish current section (desktop) */}
-            <div className="hidden items-center gap-1 text-xs text-muted-foreground md:flex">
-              <span className="truncate max-w-[14ch]">{pathname}</span>
-            </div>
+            {/* Search icon for mobile/tablet */}
+            <Button variant="ghost" size="icon" className="lg:hidden" aria-label="Search">
+              <Search className="h-5 w-5" />
+            </Button>
 
             <Button variant="ghost" size="icon" aria-label="Notifications">
               <Bell className="h-5 w-5" />
