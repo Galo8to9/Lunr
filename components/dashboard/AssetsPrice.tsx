@@ -135,7 +135,7 @@ export default function AssetsPrice() {
 
       // Add tokens
       if (data.tokens && data.tokens.length > 0) {
-        data.tokens.forEach((token) => {
+        data.tokens.forEach((token: any) => {
           const symbol = token.metadata?.symbol || "UNKNOWN";
           const balance = parseFloat(
             formatBalance(token.tokenBalance, token.metadata?.decimals || 18)
