@@ -1,5 +1,4 @@
 "use client";
-
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useAccount, useDisconnect, useSignMessage } from "wagmi";
@@ -7,6 +6,12 @@ import { Button } from "../ui/button";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { SiweMessage } from "siwe";
 import { WalletButton } from "../ui/walletButton";
+
+// Define the session type
+interface SessionData {
+  address?: string;
+  chainId?: number;
+}
 
 export function SignInButton() {
   // WEB3 WALLET
@@ -21,7 +26,7 @@ export function SignInButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<SessionData | null>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -65,19 +70,19 @@ export function SignInButton() {
       });
 
       const preparedMessage = message.prepareMessage();
-
       console.log("CLIENT DEBUG");
       console.log("Prepared message:", preparedMessage);
 
       const signature = await signMessageAsync({
         message: preparedMessage,
       });
+
       console.log("CLIENT DEBUG");
       console.log("Signature", signature);
 
       const res = await fetch("/api/siwe/signmessage", {
         method: "POST",
-        headers: { "Conent-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }, // Fixed typo: was "Conent-Type"
         body: JSON.stringify({
           message: preparedMessage,
           signature: signature,
@@ -86,12 +91,12 @@ export function SignInButton() {
 
       const data = await res.json();
       console.log("CLIENT DEBUG");
-      console.log("Server responde:", data);
+      console.log("Server response:", data); // Fixed typo: was "responde"
 
       if (res.ok && data.ok) {
         window.location.href = "/dashboard";
       } else {
-        setError(data.erro || "Failed to sign message");
+        setError(data.error || "Failed to sign message"); // Fixed typo: was "erro"
       }
     } catch (err) {
       console.error("=== Client Error ===", err);
@@ -120,6 +125,7 @@ export function SignInButton() {
       </div>
     );
   }
+
   return (
     <div className="flex w-full justify-center">
       {!address && <WalletButton />}
