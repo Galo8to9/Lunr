@@ -1,4 +1,4 @@
-import { getIronSession } from "iron-session";
+import { getIronSession, SessionOptions } from "iron-session";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 import { SiweMessage } from "siwe";
@@ -10,11 +10,10 @@ interface SessionData {
   nonce?: string;
 }
 
-const sessionOptions = {
+const sessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET!,
   cookieName: "siwe-session",
   cookieOptions: {
-    // Fixed typo: was "cookieOption"
     secure: process.env.NODE_ENV === "production",
   },
 };
