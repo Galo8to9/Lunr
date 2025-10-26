@@ -15,7 +15,6 @@ import { useCommitProofPayload } from "@/stores/commitProofPayload";
 import { buildFromSnapshot } from "@/lib/merkle";
 import useSWR from "swr";
 import { Loader2, Check, Copy, CheckCheck, ExternalLink } from "lucide-react";
-import { uploadToLighthouse } from "@/lib/lighthouseService";
 
 const CHAIN_ID = "eth";
 
@@ -51,11 +50,6 @@ export default function GenerateProof() {
   const { wallets } = useWalletStore();
   const { prices, getPriceBySymbol } = usePythPriceCotations();
   const { createSnapshot } = useCommitProofPayload();
-  const {
-    uploadSnapshot,
-    isUploading: isUploadingToIPFS,
-    uploadResult,
-  } = uploadToLighthouse();
 
   const [isGenerating, setIsGenerating] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -119,7 +113,7 @@ export default function GenerateProof() {
 
         // Add ERC20 tokens
         if (data.tokens && data.tokens.length > 0) {
-          data.tokens.forEach((token) => {
+          data.tokens.forEach((token: any) => {
             tokens.push({
               symbol: token.metadata?.symbol || "UNKNOWN",
               amount: formatBalance(
@@ -197,31 +191,6 @@ export default function GenerateProof() {
       };
 
       const merkleData = buildFromSnapshot(snapshot);
-
-      // ============================================
-      // Upload to IPFS via Pinata
-      // ============================================
-      try {
-        console.log("📤 Uploading snapshot to IPFS via Pinata...");
-
-        const ipfsResult = await uploadSnapshot(merkleData, "pinata");
-
-        setIpfsHash(ipfsResult.ipfsHash);
-        setEncryptionKey(ipfsResult.encryptionKey);
-        setIpfsUrl(ipfsResult.url);
-
-        console.log("✅ Successfully uploaded to IPFS!");
-        console.log("IPFS Hash:", ipfsResult.ipfsHash);
-        console.log("Encryption Key (SAVE THIS!):", ipfsResult.encryptionKey);
-        console.log("Gateway URL:", ipfsResult.url);
-        console.log(
-          "⚠️ SAVE BOTH THE IPFS HASH AND ENCRYPTION KEY TO RETRIEVE YOUR DATA LATER!"
-        );
-      } catch (ipfsError) {
-        console.error("❌ IPFS upload failed (continuing anyway):", ipfsError);
-        // Don't throw - we still want to show the snapshot even if IPFS fails
-      }
-      // ============================================
 
       console.log("=== Comprehensive Snapshot & Merkle Trees Created ===");
       console.log("Snapshot ID:", snapshotId);
@@ -362,13 +331,12 @@ export default function GenerateProof() {
       <DialogTrigger asChild>
         <Button
           onClick={handleGenerateProof}
-          disabled={isGenerating || isLoading || !hasData || isUploadingToIPFS}
+          disabled={isGenerating || isLoading || !hasData}
           className="w-full"
         >
-          {isGenerating || isUploadingToIPFS ? (
+          {isGenerating ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              {isUploadingToIPFS ? "Uploading to IPFS..." : "Generating..."}
             </>
           ) : success ? (
             <>
