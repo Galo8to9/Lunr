@@ -1,4 +1,3 @@
-import EncryptedUploader from "@/components/crypto/EncryptedUploader";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import OwnedWallets from "@/components/dashboard/OwnedWallets";
 import PriceFeed from "@/components/dashboard/PriceFeed";
