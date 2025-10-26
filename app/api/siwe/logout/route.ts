@@ -7,13 +7,14 @@ const sessionOptions = {
   password: process.env.SESSION_SECRET!,
   cookieOptions: {
     secure: process.env.NODE_ENV === "production",
-    path: "/", // make sure it matches your middleware usage
+    path: "/",
   },
 };
 
 export async function POST() {
-  // Bind iron-session to Next's cookie store
-  const session = await getIronSession(cookies(), sessionOptions);
+  // Await cookies() first, then pass to getIronSession
+  const cookieStore = await cookies();
+  const session = await getIronSession(cookieStore, sessionOptions);
 
   // This clears the iron-session cookie by setting an expired Set-Cookie header
   await session.destroy();

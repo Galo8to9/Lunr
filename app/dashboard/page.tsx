@@ -1,3 +1,4 @@
+import EncryptedUploader from "@/components/crypto/EncryptedUploader";
 import DashboardNavbar from "@/components/dashboard/DashboardNavbar";
 import OwnedWallets from "@/components/dashboard/OwnedWallets";
 import PriceFeed from "@/components/dashboard/PriceFeed";
@@ -8,9 +9,9 @@ import React from "react";
 
 const page = () => {
   return (
-<div className="flex flex-col">
-<PriceFeed/>
-</div>
+    <div className="flex flex-col">
+      <PriceFeed />
+    </div>
   );
 };
 
