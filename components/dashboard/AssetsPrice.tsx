@@ -53,13 +53,13 @@ const SYMBOL_TO_PYTH_MAP: Record<string, string> = {
   XRP: "XRPUSD",
 };
 
-const formatBalance = (hexBalance, decimals) => {
+const formatBalance = (hexBalance: string, decimals: number) => {
   const balance = parseInt(hexBalance, 16);
   const formatted = balance / Math.pow(10, decimals);
   return formatted.toFixed(4);
 };
 
-const formatNativeBalance = (hexBalance) => {
+const formatNativeBalance = (hexBalance: string) => {
   const balance = parseInt(hexBalance, 16);
   const formatted = balance / Math.pow(10, 18);
   return formatted.toFixed(4);
